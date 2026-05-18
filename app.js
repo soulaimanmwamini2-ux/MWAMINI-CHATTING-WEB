@@ -66,7 +66,6 @@ function initDashboardPage() {
         });
     }
 
-    // --- INSTANT GROUP CREATION (TRACKS MEMBERS ARRAY UPON PROVISIONING) ---
     const groupSelectMenu = document.getElementById("group-type-select");
     const groupPasswordField = document.getElementById("group-password-input");
     const createGroupActionBtn = document.getElementById("create-group-btn");
@@ -107,7 +106,7 @@ function initDashboardPage() {
                     groupType: architectureType,
                     groupPassword: codeKeyPayload,
                     isOnline: true,
-                    allowedMembers: [currentUser.uid] // Creator initialized automatically
+                    allowedMembers: [currentUser.uid]
                 });
 
                 alert(`Global Chat Room "${title}" created successfully!`);
@@ -120,7 +119,6 @@ function initDashboardPage() {
         });
     }
 
-    // --- UPGRADED CONTEXTUAL MEMBER ADDITION INTERFACE ROUTINE ---
     const addMemberActionBtn = document.getElementById("btn-add-member-action");
     if (addMemberActionBtn) {
         addMemberActionBtn.addEventListener("click", async () => {
@@ -131,7 +129,6 @@ function initDashboardPage() {
             const targetedUserName = selectMenu.options[selectMenu.selectedIndex].text;
 
             try {
-                // Provision permissions natively directly inside the user's room document state
                 await updateDoc(doc(db, "users", activeChatId), {
                     allowedMembers: arrayUnion(targetedUserUid)
                 });
@@ -164,11 +161,10 @@ function initDashboardPage() {
 
             displayBox.innerText = inviteStringPayload;
             displayBox.classList.remove("hidden");
-            alert("Invite link copied below. Users clicking this link automatically get added to the room list.");
+            alert("Invite link generated below.");
         });
     }
 
-    // --- AUTOMATIC INBOUND LINK DETECTOR PASSTHROUGH ENGINE ---
     const urlParams = new URLSearchParams(window.location.search);
     const incomingRoomId = urlParams.get('joinRoomId');
     if (incomingRoomId) {
@@ -184,7 +180,6 @@ function initDashboardPage() {
         }, 1500);
     }
 
-    // --- UNREAD TRAFFIC ALERT PIPELINE ---
     onSnapshot(collection(db, "chats"), (snapshot) => {
         snapshot.forEach((chatDoc) => {
             const info = chatDoc.data();
@@ -202,7 +197,6 @@ function initDashboardPage() {
         });
     });
 
-    // --- VOICE MEMO CAPTURE MECHANIC ---
     const recordVoiceBtn = document.getElementById("voice-record-btn");
     const recordStatusText = document.getElementById("voice-recording-status");
 
@@ -385,14 +379,12 @@ function buildSidebarChannelRowElement(userData) {
     newRowElement.addEventListener("click", () => {
         if (isRoomChannel && userData.groupType === "protected") {
             const membersList = userData.allowedMembers || [];
-            // If the current user isn't directly cleared inside the room array, trigger password gate check
             if (!membersList.includes(currentUser.uid)) {
                 const clientAttemptToken = prompt(`Security Verification required.\nEnter password to access "${userData.name}":`);
                 if (clientAttemptToken !== userData.groupPassword) {
                     alert("Authorization Denied: Invalid password key.");
                     return;
                 }
-                // Save access natively to allow them instant entry on subsequent visits
                 updateDoc(doc(db, "users", userData.uid), {
                     allowedMembers: arrayUnion(currentUser.uid)
                 }).catch(() => {});
@@ -410,7 +402,6 @@ function buildSidebarChannelRowElement(userData) {
         document.getElementById("no-chat-selected").classList.add("hidden");
         document.getElementById("active-chat-area").classList.remove("hidden");
         
-        // POPULATE METADATA STRINGS DIRECTLY ABOVE CHATROOM NAME DISPLAY
         const metaField = document.getElementById("chat-header-group-meta");
         if(metaField) {
             metaField.innerText = isRoomChannel 
@@ -493,14 +484,11 @@ function bindLiveIsolatedMessageStreams(collectionReference) {
                 if(cloudSpeakerBtn) {
                     cloudSpeakerBtn.addEventListener("click", () => {
                         const narrativeInstance = new SpeechSynthesisUtterance(data.text);
-                        
-                        // Select Google Voice synthesizers inside standard Web Speech controllers
                         const platformAvailableVoices = window.speechSynthesis.getVoices();
                         const googleVoiceAsset = platformAvailableVoices.find(v => v.name.includes("Google") || v.name.includes("Assistant"));
                         if(googleVoiceAsset) {
                             narrativeInstance.voice = googleVoiceAsset;
                         }
-                        
                         narrativeInstance.lang = 'en-US';
                         window.speechSynthesis.speak(narrativeInstance);
                     });
