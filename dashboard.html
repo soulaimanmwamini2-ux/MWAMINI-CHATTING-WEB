@@ -1,45 +1,41 @@
-<div class="flex h-full w-full bg-[#f0f2f5] dark:bg-[#111b21]">
-    <aside class="w-1/3 border-r border-gray-300 flex flex-col bg-white dark:bg-[#111b21]">
-        <div class="h-16 bg-[#f0f2f5] flex items-center justify-between px-4">
-            <ion-icon name="person-circle" class="text-3xl"></ion-icon>
+<div class="flex h-screen bg-[#f0f2f5] dark:bg-[#111b21]">
+    <aside class="w-1/3 border-r dark:border-[#222d34] flex flex-col bg-white dark:bg-[#111b21]">
+        <header class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] flex justify-between">
+            <h1 class="text-[#00a884] font-bold">Mwamini Chats</h1>
             <div class="flex gap-4">
-                <ion-icon onclick="toggleStatusModal()" name="disc-outline" title="Status" class="cursor-pointer"></ion-icon>
-                <ion-icon onclick="showGroupCreate()" name="add-circle-outline" title="New Group" class="cursor-pointer"></ion-icon>
-                <ion-icon onclick="showSettings()" name="settings-outline" class="cursor-pointer"></ion-icon>
+                <button onclick="toggleGroupModal()">New Group</button>
+                <button onclick="toggleSettings()">Settings</button>
             </div>
+        </header>
+        
+        <div class="p-4 border-b dark:border-[#222d34] flex gap-4 overflow-x-auto">
+            <div class="w-12 h-12 rounded-full border-2 border-[#00a884] flex-shrink-0 cursor-pointer" onclick="addStatus()">+</div>
+            <div id="status-container" class="flex gap-2"></div>
         </div>
-        <div id="chat-list" class="flex-1 overflow-y-auto">
-            </div>
+
+        <div id="chat-list" class="flex-1 overflow-y-auto"></div>
     </aside>
 
-    <main id="chat-main" class="flex-1 flex flex-col relative" style="background-color: #efeae2;">
-        <div class="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png')]"></div>
-        
-        <header class="h-16 bg-[#f0f2f5] z-10 flex items-center px-4 justify-between">
-            <span id="active-title" class="font-bold">Select a Chat</span>
-            <button id="del-group-btn" class="hidden text-red-500 text-sm" onclick="handleGroupDelete()">Delete Group</button>
+    <main id="chat-main" class="flex-1 flex flex-col bg-cover bg-center" style="background-image: url('default-bg.jpg');">
+        <header class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] z-10 flex justify-between">
+            <div id="active-chat-info"></div>
+            <button id="delete-group-btn" class="hidden text-red-500" onclick="handleGroupDelete()">Delete Group</button>
         </header>
 
-        <div id="messages" class="flex-1 p-4 overflow-y-auto z-10"></div>
+        <div id="messages" class="flex-1 overflow-y-auto p-4 z-10"></div>
 
-        <footer class="p-3 bg-[#f0f2f5] z-10 flex gap-2">
-            <input id="m-input" class="flex-1 p-2 rounded-lg outline-none" placeholder="Type a message">
-            <button onclick="handleSend()" class="text-[#00a884] text-2xl"><ion-icon name="send"></ion-icon></button>
+        <footer class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] z-10 flex gap-4">
+            <input id="msg-input" class="flex-1 p-2 rounded-lg dark:bg-[#2a3942]" placeholder="Type a message">
+            <button onclick="sendMessage()" class="text-[#00a884]">Send</button>
         </footer>
     </main>
 
-    <div id="settings-overlay" class="hidden absolute inset-0 bg-black/50 z-[100] flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg w-80">
-            <h3 class="font-bold mb-4">Settings</h3>
-            <label class="text-sm">Chat Background</label>
-            <input type="color" onchange="changeBg(this.value)" class="w-full mb-4">
-            
-            <label class="text-sm">Who can see I'm online?</label>
-            <select onchange="updatePrivacySetting(this.value)" class="w-full p-2 border mb-6">
-                <option value="everyone">Everyone</option>
-                <option value="nobody">Nobody</option>
-            </select>
-            <button onclick="closeSettings()" class="w-full bg-[#00a884] text-white p-2 rounded">Save & Close</button>
+    <div id="bg-panel" class="hidden fixed right-0 w-64 h-full bg-white dark:bg-[#202c33] shadow-lg p-4 z-20">
+        <h3 class="mb-4">Choose Background</h3>
+        <div class="grid grid-cols-2 gap-2">
+            <div class="h-20 bg-blue-200 cursor-pointer" onclick="setBG('blue.jpg')"></div>
+            <div class="h-20 bg-green-200 cursor-pointer" onclick="setBG('green.jpg')"></div>
+            <div class="h-20 bg-gray-800 cursor-pointer" onclick="setBG('dark.jpg')"></div>
         </div>
     </div>
 </div>
