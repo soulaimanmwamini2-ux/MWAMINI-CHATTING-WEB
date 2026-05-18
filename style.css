@@ -1,41 +1,35 @@
-:root {
-    --wa-green: #00a884;
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
 }
 
-body { font-family: 'Segoe UI', sans-serif; }
+/* Chat Bubbles */
+.message {
+    max-width: 65%;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    position: relative;
+}
 
 .me {
     align-self: flex-end;
     background: #d9fdd3;
-    border-radius: 8px 0 8px 8px;
-    padding: 6px 12px;
-    margin: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 .them {
     align-self: flex-start;
     background: #ffffff;
-    border-radius: 0 8px 8px 8px;
-    padding: 6px 12px;
-    margin: 4px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-#messages { display: flex; flex-direction: column; }
+/* Dark Mode Overrides */
+.dark .me { background: #005c4b; color: white; }
+.dark .them { background: #202c33; color: white; }
 
-.loader {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.animate-spin {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* Status Ring Animation */
+.status-ring {
+    border: 2px solid #00a884;
+    padding: 2px;
+    border-radius: 50%;
 }
