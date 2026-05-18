@@ -1,45 +1,41 @@
-/* WhatsApp Colors */
 :root {
-    --wa-teal: #00a884;
-    --wa-bg-light: #f0f2f5;
-    --wa-bg-dark: #111b21;
-    --msg-me: #d9fdd3;
-    --msg-them: #ffffff;
+    --wa-green: #00a884;
 }
 
-.dark {
-    --msg-me: #005c4b;
-    --msg-them: #202c33;
-}
-
-/* Scrollbar Style */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
-
-/* Chat Bubbles with "Tail" Effect */
-.message-bubble {
-    position: relative;
-    padding: 6px 10px;
-    border-radius: 8px;
-    font-size: 14.5px;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-}
+body { font-family: 'Segoe UI', sans-serif; }
 
 .me {
     align-self: flex-end;
-    background-color: var(--msg-me);
-    border-top-right-radius: 0;
+    background: #d9fdd3;
+    border-radius: 8px 0 8px 8px;
+    padding: 6px 12px;
+    margin: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
 .them {
     align-self: flex-start;
-    background-color: var(--msg-them);
-    border-top-left-radius: 0;
+    background: #ffffff;
+    border-radius: 0 8px 8px 8px;
+    padding: 6px 12px;
+    margin: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
 
-/* Animations */
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+#messages { display: flex; flex-direction: column; }
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
-.msg-anim { animation: slideIn 0.2s ease-out forwards; }
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
