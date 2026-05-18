@@ -2,18 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Web | Mwamini Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 </head>
 <body class="bg-[#dadbd3] dark:bg-[#0b141a]">
-    <div id="app-root" class="h-screen w-full flex items-center justify-center">
-        <div class="loader">
-            <div class="w-16 h-16 border-4 border-[#00a884] border-t-transparent rounded-full animate-spin"></div>
+    <div id="loading-screen" class="fixed inset-0 flex flex-col items-center justify-center bg-[#f0f2f5] dark:bg-[#111b21] z-50">
+        <div class="w-16 h-16 border-4 border-[#00a884] border-t-transparent rounded-full animate-spin"></div>
+        <div class="mt-8 w-64 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-[#00a884] animate-[loading_2s_ease-in-out_infinite]"></div>
+        </div>
+        <p class="mt-4 text-[#667781] text-sm font-medium uppercase tracking-widest">Mwamini Secure</p>
+    </div>
+
+    <div id="auth-ui" class="hidden h-screen flex items-center justify-center">
+        <div class="bg-white dark:bg-[#202c33] p-8 rounded-lg shadow-xl w-full max-w-md">
+            <h2 class="text-2xl font-bold mb-6 text-[#00a884]">Login to Mwamini</h2>
+            <input type="email" id="email" placeholder="Email" class="w-full p-3 mb-4 rounded border dark:bg-[#2a3942] dark:border-none">
+            <input type="password" id="password" placeholder="Password" class="w-full p-3 mb-6 rounded border dark:bg-[#2a3942] dark:border-none">
+            <button onclick="handleAuth('login')" class="w-full bg-[#00a884] text-white p-3 rounded font-bold mb-3">Login</button>
+            <button onclick="handleAuth('register')" class="w-full border border-[#00a884] text-[#00a884] p-3 rounded font-bold mb-3">Register</button>
+            <div class="flex items-center my-4"><hr class="flex-1"> <span class="px-3 text-gray-400">OR</span> <hr class="flex-1"></div>
+            <button onclick="handleAuth('guest')" class="w-full bg-gray-200 dark:bg-[#2a3942] p-3 rounded font-bold">Enter as Guest</button>
         </div>
     </div>
+
     <script type="module" src="App.js"></script>
 </body>
 </html>
