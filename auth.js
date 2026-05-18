@@ -2,71 +2,60 @@ import { auth, db } from "./App.js";
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword, 
-    signInWithPopup, 
-    GoogleAuthProvider,
     signInAnonymously,
+    sendEmailVerification,
     onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const authOverlay = document.getElementById("authOverlay");
-const getStartedBtn = document.getElementById("getStartedBtn");
-const switchAuthMode = document.getElementById("switchAuthMode");
+const switchBtn = document.getElementById("switchAuthMode");
 const usernameGroup = document.getElementById("usernameGroup");
 const authForm = document.getElementById("authForm");
 
-// Show Auth UI
-getStartedBtn.addEventListener("click", () => authOverlay.classList.remove("hidden"));
+// UI Toggle Logic
+document.getElementById("navLoginBtn").onclick = () => authOverlay.classList.remove("hidden");
+document.getElementById("getStartedBtn").onclick = () => authOverlay.classList.remove("hidden");
 
-// Toggle Login / Register
-let isSignUp = false;
-switchAuthMode.addEventListener("click", (e) => {
+let isRegistering = false;
+
+switchBtn.onclick = (e) => {
     e.preventDefault();
-    isSignUp = !isSignUp;
-    usernameGroup.style.display = isSignUp ? "flex" : "none";
-    document.getElementById("authTitle").innerText = isSignUp ? "Create Account" : "Sign In";
-    document.getElementById("submitAuthBtn").innerText = isSignUp ? "Register" : "Sign In";
-    switchAuthMode.innerText = isSignUp ? "Log In" : "Create Account";
-});
+    isRegistering = !isRegistering;
+    usernameGroup.style.display = isRegistering ? "flex" : "none";
+    document.getElementById("authTitle").innerText = isRegistering ? "Create Account" : "Secure Login";
+    document.getElementById("submitAuthBtn").innerText = isRegistering ? "Register & Verify" : "Sign In";
+    switchBtn.innerText = isRegistering ? "Login instead" : "Register Now";
+};
 
-// Handle Email Auth
-authForm.addEventListener("submit", async (e) => {
+// Form Logic
+authForm.onsubmit = async (e) => {
     e.preventDefault();
     const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
-    
+    const pass = document.getElementById("authPassword").value;
+    const user = document.getElementById("authUsername").value;
+
     try {
-        if (isSignUp) {
-            const cred = await createUserWithEmailAndPassword(auth, email, password);
-            await setupUserDoc(cred.user);
+        if (isRegistering) {
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            await sendEmailVerification(cred.user);
+            await setDoc(doc(db, "users", cred.user.uid), { username: user, email });
+            alert("Verification email sent! Please check your inbox before logging in.");
         } else {
-            await signInWithEmailAndPassword(auth, email, password);
+            const cred = await signInWithEmailAndPassword(auth, email, pass);
+            if (!cred.user.emailVerified) {
+                alert("Please verify your email first!");
+                return;
+            }
+            window.location.href = "dashboard.html";
         }
-        window.location.href = "dashboard.html";
     } catch (err) { alert(err.message); }
-});
+};
 
-// Guest Mode
-document.getElementById("guestLoginBtn").addEventListener("click", async () => {
+// Guest Mode Logic
+document.getElementById("guestModeBtn").onclick = async () => {
     try {
-        const cred = await signInAnonymously(auth);
-        await setupUserDoc(cred.user, true);
+        await signInAnonymously(auth);
         window.location.href = "dashboard.html";
     } catch (err) { alert(err.message); }
-});
-
-async function setupUserDoc(user, isGuest = false) {
-    await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name: isGuest ? "Guest User" : user.email,
-        status: "online",
-        joined: serverTimestamp()
-    });
-}
-
-// Global Auth Watcher
-onAuthStateChanged(auth, (user) => {
-    if (user && window.location.pathname.includes("index.html")) {
-        window.location.href = "dashboard.html";
-    }
-});
+};
