@@ -3,31 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Web | Mwamini Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Mwamini Chating Web - Connect Securely</title>
     <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-[#dadbd3] dark:bg-[#0b141a]">
-    <div id="loading-screen" class="fixed inset-0 flex flex-col items-center justify-center bg-[#f0f2f5] dark:bg-[#111b21] z-50">
-        <div class="w-16 h-16 border-4 border-[#00a884] border-t-transparent rounded-full animate-spin"></div>
-        <div class="mt-8 w-64 h-1 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-[#00a884] animate-[loading_2s_ease-in-out_infinite]"></div>
+<body>
+    <div class="animated-bg"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <i class="fa-solid fa-comments-blur logo-icon"></i>
+            <span>MWAMINI</span>
         </div>
-        <p class="mt-4 text-[#667781] text-sm font-medium uppercase tracking-widest">Mwamini Secure</p>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#" id="supportBtn">Support</a>
+            <button class="btn btn-outline" id="navLoginBtn">Login</button>
+        </div>
+    </nav>
+
+    <!-- Hero / Welcome Section -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-content">
+            <h1 class="glow-text">MWAMINI CHATING WEB</h1>
+            <p>Experience ultra-fast, secure, and crystal-clear real-time communication. Inspired by the best, built for the future.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" id="getStartedBtn">Get Started <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn btn-glass" id="learnMoreBtn">Explore Features</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Modal Container -->
+    <div class="auth-container hidden" id="authContainer">
+        <div class="auth-card glass">
+            <div class="auth-header">
+                <h2 id="authTitle">Welcome Back</h2>
+                <p id="authSubtitle">Login to access your dashboard</p>
+            </div>
+            
+            <form id="authForm">
+                <div class="input-group" id="usernameGroup" style="display: none;">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="authUsername" placeholder="Full Name">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="authEmail" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="authPassword" placeholder="Password" required>
+                </div>
+                
+                <div class="auth-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" checked> Remember me
+                    </label>
+                    <a href="#" id="forgotPasswordBtn" class="auth-link">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="submitAuthBtn">Sign In</button>
+            </form>
+
+            <div class="divider"><span>OR</span></div>
+
+            <button class="btn btn-google btn-block" id="googleAuthBtn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google"> Continue with Google
+            </button>
+
+            <p class="auth-switch">
+                <span id="switchText">Don't have an account?</span> 
+                <a href="#" id="switchAuthMode" class="auth-link font-bold">Sign Up</a>
+            </p>
+        </div>
     </div>
 
-    <div id="auth-ui" class="hidden h-screen flex items-center justify-center">
-        <div class="bg-white dark:bg-[#202c33] p-8 rounded-lg shadow-xl w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-6 text-[#00a884]">Login to Mwamini</h2>
-            <input type="email" id="email" placeholder="Email" class="w-full p-3 mb-4 rounded border dark:bg-[#2a3942] dark:border-none">
-            <input type="password" id="password" placeholder="Password" class="w-full p-3 mb-6 rounded border dark:bg-[#2a3942] dark:border-none">
-            <button onclick="handleAuth('login')" class="w-full bg-[#00a884] text-white p-3 rounded font-bold mb-3">Login</button>
-            <button onclick="handleAuth('register')" class="w-full border border-[#00a884] text-[#00a884] p-3 rounded font-bold mb-3">Register</button>
-            <div class="flex items-center my-4"><hr class="flex-1"> <span class="px-3 text-gray-400">OR</span> <hr class="flex-1"></div>
-            <button onclick="handleAuth('guest')" class="w-full bg-gray-200 dark:bg-[#2a3942] p-3 rounded font-bold">Enter as Guest</button>
-        </div>
-    </div>
-
+    <!-- Firebase App App/Auth Logic Configuration Script Connections -->
     <script type="module" src="App.js"></script>
+    <script type="module" src="Auth.js"></script>
 </body>
 </html>
