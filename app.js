@@ -4,14 +4,13 @@ import { getFirestore, collection, query, onSnapshot, doc, setDoc, updateDoc, ad
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBtDMYBR0jcyK-JfgsYtET1SenPngzmQi4",
-  authDomain: "mwamini-chatting-web.firebaseapp.com",
-  databaseURL: "https://mwamini-chatting-web-default-rtdb.firebaseio.com",
-  projectId: "mwamini-chatting-web",
-  storageBucket: "mwamini-chatting-web.firebasestorage.app",
-  messagingSenderId: "640958885512",
-  appId: "1:640958885512:web:2f9a636acc85534009b93d",
-  measurementId: "G-SW9FBXX78G"
+  apiKey: "AIzaSyC50yi4x_7LRW8OBRQclknJ_ppVl-q96fg",
+  authDomain: "mwamini-chatting-web-4debe.firebaseapp.com",
+  projectId: "mwamini-chatting-web-4debe",
+  storageBucket: "mwamini-chatting-web-4debe.firebasestorage.app",
+  messagingSenderId: "537241167513",
+  appId: "1:537241167513:web:82b3c96a895d563329ba08",
+  measurementId: "G-ZB7GFW1H9M"
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
