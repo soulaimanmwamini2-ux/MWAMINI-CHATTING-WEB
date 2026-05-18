@@ -1,38 +1,72 @@
-import { signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { auth, db } from "./App.js";
+import { 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword, 
+    signInWithPopup, 
+    GoogleAuthProvider,
+    signInAnonymously,
+    onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// New Guest Login Handler
-const guestLoginBtn = document.getElementById("guestLoginBtn");
+const authOverlay = document.getElementById("authOverlay");
+const getStartedBtn = document.getElementById("getStartedBtn");
+const switchAuthMode = document.getElementById("switchAuthMode");
+const usernameGroup = document.getElementById("usernameGroup");
+const authForm = document.getElementById("authForm");
 
-if (guestLoginBtn) {
-    guestLoginBtn.addEventListener("click", async () => {
-        try {
-            const result = await signInAnonymously(auth);
-            console.log("Logged in as Guest:", result.user.uid);
-            // Setup temporary profile in Firestore
-            await setDoc(doc(db, "users", result.user.uid), {
-                uid: result.user.uid,
-                displayName: "Guest_" + Math.floor(Math.random() * 1000),
-                isAnonymous: true,
-                status: "online",
-                lastSeen: serverTimestamp()
-            });
-        } catch (error) {
-            alert("Guest access failed: " + error.message);
+// Show Auth UI
+getStartedBtn.addEventListener("click", () => authOverlay.classList.remove("hidden"));
+
+// Toggle Login / Register
+let isSignUp = false;
+switchAuthMode.addEventListener("click", (e) => {
+    e.preventDefault();
+    isSignUp = !isSignUp;
+    usernameGroup.style.display = isSignUp ? "flex" : "none";
+    document.getElementById("authTitle").innerText = isSignUp ? "Create Account" : "Sign In";
+    document.getElementById("submitAuthBtn").innerText = isSignUp ? "Register" : "Sign In";
+    switchAuthMode.innerText = isSignUp ? "Log In" : "Create Account";
+});
+
+// Handle Email Auth
+authForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("authEmail").value;
+    const password = document.getElementById("authPassword").value;
+    
+    try {
+        if (isSignUp) {
+            const cred = await createUserWithEmailAndPassword(auth, email, password);
+            await setupUserDoc(cred.user);
+        } else {
+            await signInWithEmailAndPassword(auth, email, password);
         }
+        window.location.href = "dashboard.html";
+    } catch (err) { alert(err.message); }
+});
+
+// Guest Mode
+document.getElementById("guestLoginBtn").addEventListener("click", async () => {
+    try {
+        const cred = await signInAnonymously(auth);
+        await setupUserDoc(cred.user, true);
+        window.location.href = "dashboard.html";
+    } catch (err) { alert(err.message); }
+});
+
+async function setupUserDoc(user, isGuest = false) {
+    await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: isGuest ? "Guest User" : user.email,
+        status: "online",
+        joined: serverTimestamp()
     });
 }
 
-// Security Feature: Password Reset Logic
-const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
-if (forgotPasswordBtn) {
-    forgotPasswordBtn.addEventListener("click", async () => {
-        const email = document.getElementById("authEmail").value;
-        if (!email) return alert("Please enter your email first.");
-        try {
-            await sendPasswordResetEmail(auth, email);
-            alert("Security reset link sent to your email!");
-        } catch (error) {
-            alert(error.message);
-        }
-    });
-}
+// Global Auth Watcher
+onAuthStateChanged(auth, (user) => {
+    if (user && window.location.pathname.includes("index.html")) {
+        window.location.href = "dashboard.html";
+    }
+});
