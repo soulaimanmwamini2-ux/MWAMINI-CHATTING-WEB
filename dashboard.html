@@ -1,122 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mwamini Web - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="dashboard-body theme-dark">
-    <div class="app-layout glass">
-        
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="user-profile-trigger" id="profileMenuBtn">
-                    <img src="https://via.placeholder.com/40" id="currentUserAvatar" alt="Avatar" class="avatar">
-                    <span class="status-dot online"></span>
-                </div>
-                <div class="sidebar-actions">
-                    <button title="New Group" id="createNewGroupBtn"><i class="fa-solid fa-users-medical"></i></button>
-                    <button title="Settings" id="settingsMenuBtn"><i class="fa-solid fa-gear"></i></button>
-                    <button title="Logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i></button>
-                </div>
-            </div>
+<div class="chat-header-actions">
+    <button class="call-btn" title="Voice Call"><i class="fa-solid fa-phone"></i></button>
+    <button class="call-btn" title="Video Call"><i class="fa-solid fa-video"></i></button>
+</div>
 
-            <!-- Search bar channels/users -->
-            <div class="sidebar-search">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchBar" placeholder="Search chats or public groups...">
-                </div>
-            </div>
-
-            <!-- Tab Switcher -->
-            <div class="sidebar-tabs">
-                <button class="tab-link active" data-tab="chats">Chats</button>
-                <button class="tab-link" data-tab="groups">Discover</button>
-                <button class="tab-link" data-tab="stories">Stories</button>
-            </div>
-
-            <!-- Scrollable Dynamic Target Windows -->
-            <div class="sidebar-content">
-                <div id="chatsListContainer" class="tab-panel active">
-                    <!-- Dynamic standard channels injected here via JS -->
-                    <div class="loading-skeleton"></div>
-                </div>
-                <div id="groupsDiscoveryContainer" class="tab-panel hidden">
-                    <!-- Dynamic public rooms discovery list injected here -->
-                </div>
-                <div id="storiesContainer" class="tab-panel hidden">
-                    <!-- Dynamic status story frames listed here -->
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Workspace Interaction Panel -->
-        <main class="chat-area empty-state" id="chatArea">
-            <!-- No active conversation view prompt default -->
-            <div class="empty-view" id="emptyView">
-                <i class="fa-solid fa-comments-long large-icon"></i>
-                <h2>Welcome to Mwamini Messaging Engine</h2>
-                <p>Select a direct connection thread or join a public community server group to start routing real-time data messages.</p>
-            </div>
-
-            <!-- Main active message workspace view container grid -->
-            <div class="chat-container-active hidden" id="activeChatWindow">
-                <!-- Top active metadata header -->
-                <header class="chat-header">
-                    <div class="chat-header-info">
-                        <img src="https://via.placeholder.com/45" id="targetChatAvatar" alt="Target Profile" class="avatar">
-                        <div>
-                            <h3 id="targetChatName">Group / User Room Label</h3>
-                            <p id="targetChatMeta">typing status indicator sync...</p>
-                        </div>
-                    </div>
-                    <div class="chat-header-actions">
-                        <button id="toggleThemeBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
-                    </div>
-                </header>
-
-                <!-- Scrollable Messages Log Window Grid Layout -->
-                <div class="messages-log" id="messagesLog">
-                    <!-- Real-time Reactive Chat Stream elements injected here -->
-                </div>
-
-                <!-- Footer Interactive Typing Input Stream UI Layout -->
-                <footer class="chat-footer">
-                    <button class="footer-action-btn"><i class="fa-regular fa-face-smile"></i></button>
-                    <input type="text" id="messageInputField" placeholder="Type a message safely security keys enabled...">
-                    <button class="send-btn" id="sendMessageBtn"><i class="fa-solid fa-paper-plane"></i></button>
-                </footer>
-            </div>
-        </main>
-
-        <!-- Settings Floating View Panel UI Context Box Drawer Right-to-Left Transform Layer -->
-        <div class="drawer hidden" id="settingsDrawer">
-            <div class="drawer-header">
-                <h3>Preferences Menu</h3>
-                <button class="close-drawer" id="closeSettingsBtn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="drawer-content">
-                <label>System Graphic Theme Profile</label>
-                <select id="themeSelector">
-                    <option value="theme-dark">Midnight Shadow (Dark)</option>
-                    <option value="theme-light">Crystal Glass (Light)</option>
-                </select>
-                
-                <label>Text Layout Font Weight Scale</label>
-                <select id="fontSizeSelector">
-                    <option value="font-sm">Compact (Small)</option>
-                    <option value="font-md" selected>Default Core Size</option>
-                    <option value="font-lg">Large Accessible View</option>
-                </select>
-            </div>
-        </div>
-    </div>
-
-    <script type="module" src="App.js"></script>
-    <script type="module" src="Auth.js"></script>
-</body>
-</html>
+<footer class="chat-footer">
+    <label class="footer-action-btn" for="file-input">
+        <i class="fa-solid fa-paperclip"></i>
+        <input type="file" id="file-input" hidden>
+    </label>
+    <input type="text" id="messageInputField" placeholder="Type a message...">
+    <button class="send-btn" id="sendMessageBtn"><i class="fa-solid fa-paper-plane"></i></button>
+</footer>
