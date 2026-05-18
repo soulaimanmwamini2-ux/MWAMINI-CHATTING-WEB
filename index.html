@@ -12,21 +12,21 @@
     
     <nav class="navbar glass">
         <div class="nav-logo">
-            <i class="fa-solid fa-shield-cat logo-icon"></i>
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
             <span>MWAMINI</span>
         </div>
         <div class="nav-links">
-            <button class="btn btn-outline" id="navLoginBtn">Login</button>
+            <button class="btn btn-glass" id="navLoginBtn">Login</button>
         </div>
     </nav>
 
     <section class="hero-section" id="heroSection">
         <div class="hero-content">
             <h1 class="glow-text">MWAMINI CHATING WEB</h1>
-            <p>The next generation of secure, real-time messaging. Fast. Simple. Beautiful.</p>
+            <p>Secure, real-time messaging with high-fidelity calling.</p>
             <div class="hero-buttons">
                 <button class="btn btn-primary" id="getStartedBtn">Get Started <i class="fa-solid fa-bolt"></i></button>
-                <button class="btn btn-glass">Learn More</button>
+                <button class="btn btn-glass" id="guestModeBtn">Try Guest Mode</button>
             </div>
         </div>
     </section>
@@ -34,14 +34,14 @@
     <div class="auth-overlay hidden" id="authOverlay">
         <div class="auth-card glass">
             <div class="auth-header">
-                <h2 id="authTitle">Sign In</h2>
-                <p id="authSubtitle">Access your private dashboard</p>
+                <h2 id="authTitle">Secure Login</h2>
+                <p id="authSubtitle">Please enter your credentials</p>
             </div>
             
             <form id="authForm">
                 <div class="input-group" id="usernameGroup" style="display: none;">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" id="authUsername" placeholder="Full Name">
+                    <input type="text" id="authUsername" placeholder="Create Username">
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-envelope"></i>
@@ -56,18 +56,13 @@
 
             <div class="divider"><span>OR</span></div>
 
-            <div class="social-grid">
-                <button class="btn btn-google" id="googleAuthBtn">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Google
-                </button>
-                <button class="btn btn-guest" id="guestLoginBtn">
-                    <i class="fa-solid fa-user-secret"></i> Guest
-                </button>
-            </div>
+            <button class="btn btn-google btn-block" id="googleAuthBtn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Continue with Google
+            </button>
 
             <p class="auth-switch">
-                <span id="switchText">New here?</span> 
-                <a href="#" id="switchAuthMode">Create Account</a>
+                <span id="switchText">Don't have an account?</span> 
+                <a href="#" id="switchAuthMode">Register Now</a>
             </p>
         </div>
     </div>
