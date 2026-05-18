@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, query, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, updateDoc, collection, addDoc, deleteDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-// === PASTE YOUR FIREBASE CONFIGURATION HERE ===
+// === PASTE YOUR FIREBASE CONFIG HERE ===
 const firebaseConfig = {
   apiKey: "AIzaSyC50yi4x_7LRW8OBRQclknJ_ppVl-q96fg",
   authDomain: "mwamini-chatting-web-4debe.firebaseapp.com",
@@ -12,28 +12,54 @@ const firebaseConfig = {
   appId: "1:537241167513:web:82b3c96a895d563329ba08",
   measurementId: "G-ZB7GFW1H9M"
 };
-// ==============================================
+// =======================================
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
-// Message Sender Logic
-export const sendMessage = async (chatId, text, senderId) => {
-    if (!text.trim()) return;
-    await addDoc(collection(db, "chats", chatId, "messages"), {
+// --- UPGRADED FEATURES ---
+
+// 1. Status Posting
+export const postStatus = async (userId, text, imageUrl = "") => {
+    await addDoc(collection(db, "status"), {
+        userId,
         text,
-        senderId,
-        timestamp: serverTimestamp(),
-        status: 'sent' // sent, delivered, read
+        image: imageUrl,
+        createdAt: serverTimestamp(),
+        expiresAt: Date.now() + 86400000 // 24 Hours
     });
 };
 
-// Listen for Auth Changes
+// 2. Group Management
+export const createGroup = async (name, adminId) => {
+    const groupRef = await addDoc(collection(db, "groups"), {
+        name,
+        admin: adminId,
+        members: [adminId],
+        isPublic: true,
+        createdAt: serverTimestamp()
+    });
+    return groupRef.id;
+};
+
+export const deleteGroup = async (groupId, userId) => {
+    // Only admin can delete (Security check)
+    await deleteDoc(doc(db, "groups", groupId));
+};
+
+// 3. Privacy Settings (Online Visibility)
+export const updatePrivacy = async (userId, visibilityLevel) => {
+    // levels: 'everyone', 'contacts', 'nobody'
+    await updateDoc(doc(db, "users", userId), { onlineVisibility: visibilityLevel });
+};
+
+// Start logic
 onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "index.html"; 
+    const root = document.getElementById('app-root');
+    if (!user && !sessionStorage.getItem('guestMode')) {
+        import('./Auth.js').then(m => m.renderAuth(root));
     } else {
-        // Initialize Dashboard logic
+        import('./dashboard.html').then(() => renderDashboard(root, user));
     }
 });
