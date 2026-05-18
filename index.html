@@ -1,45 +1,78 @@
-<div class="auth-container hidden" id="authContainer">
-    <div class="auth-card glass">
-        <div class="auth-header">
-            <h2 id="authTitle">Secure Access</h2>
-            <p id="authSubtitle">Join the MWAMINI community</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MWAMINI CHATING WEB</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <nav class="navbar glass">
+        <div class="nav-logo">
+            <i class="fa-solid fa-shield-cat logo-icon"></i>
+            <span>MWAMINI</span>
         </div>
-        
-        <form id="authForm">
-            <div class="input-group" id="usernameGroup" style="display: none;">
-                <i class="fa-solid fa-user"></i>
-                <input type="text" id="authUsername" placeholder="Full Name">
+        <div class="nav-links">
+            <button class="btn btn-outline" id="navLoginBtn">Login</button>
+        </div>
+    </nav>
+
+    <section class="hero-section" id="heroSection">
+        <div class="hero-content">
+            <h1 class="glow-text">MWAMINI CHATING WEB</h1>
+            <p>The next generation of secure, real-time messaging. Fast. Simple. Beautiful.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" id="getStartedBtn">Get Started <i class="fa-solid fa-bolt"></i></button>
+                <button class="btn btn-glass">Learn More</button>
             </div>
-            <div class="input-group">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="email" id="authEmail" placeholder="Email Address" required>
-            </div>
-            <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input type="password" id="authPassword" placeholder="Password" required>
+        </div>
+    </section>
+
+    <div class="auth-overlay hidden" id="authOverlay">
+        <div class="auth-card glass">
+            <div class="auth-header">
+                <h2 id="authTitle">Sign In</h2>
+                <p id="authSubtitle">Access your private dashboard</p>
             </div>
             
-            <button type="submit" class="btn btn-primary btn-block" id="submitAuthBtn">Sign In</button>
-        </form>
+            <form id="authForm">
+                <div class="input-group" id="usernameGroup" style="display: none;">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="authUsername" placeholder="Full Name">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="authEmail" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="authPassword" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="submitAuthBtn">Sign In</button>
+            </form>
 
-        <div class="divider"><span>OR</span></div>
+            <div class="divider"><span>OR</span></div>
 
-        <div class="social-auth">
-            <button class="btn btn-google" id="googleAuthBtn">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google"> Google
-            </button>
-            <button class="btn btn-guest" id="guestLoginBtn">
-                <i class="fa-solid fa-user-secret"></i> Guest Mode
-            </button>
-        </div>
+            <div class="social-grid">
+                <button class="btn btn-google" id="googleAuthBtn">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18"> Google
+                </button>
+                <button class="btn btn-guest" id="guestLoginBtn">
+                    <i class="fa-solid fa-user-secret"></i> Guest
+                </button>
+            </div>
 
-        <p class="auth-switch">
-            <span id="switchText">Don't have an account?</span> 
-            <a href="#" id="switchAuthMode" class="auth-link">Sign Up</a>
-        </p>
-        
-        <div class="security-badge">
-            <i class="fa-solid fa-shield-halved"></i> End-to-end encryption active
+            <p class="auth-switch">
+                <span id="switchText">New here?</span> 
+                <a href="#" id="switchAuthMode">Create Account</a>
+            </p>
         </div>
     </div>
-</div>
+
+    <script type="module" src="App.js"></script>
+    <script type="module" src="Auth.js"></script>
+</body>
+</html>
