@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Your web app's Firebase configuration
+const firebaseConfig = {
 const firebaseConfig = {
   apiKey: "AIzaSyC50yi4x_7LRW8OBRQclknJ_ppVl-q96fg",
   authDomain: "mwamini-chatting-web-4debe.firebaseapp.com",
@@ -13,9 +13,6 @@ const firebaseConfig = {
   measurementId: "G-ZB7GFW1H9M"
 };
 
-// Initialize Firebase Production Engine
 const app = initializeApp(firebaseConfig);
-
-// Export instances to handle real-time subscriptions downstream
 export const auth = getAuth(app);
 export const db = getFirestore(app);
