@@ -1,41 +1,122 @@
-<div class="flex h-screen bg-[#f0f2f5] dark:bg-[#111b21]">
-    <aside class="w-1/3 border-r dark:border-[#222d34] flex flex-col bg-white dark:bg-[#111b21]">
-        <header class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] flex justify-between">
-            <h1 class="text-[#00a884] font-bold">Mwamini Chats</h1>
-            <div class="flex gap-4">
-                <button onclick="toggleGroupModal()">New Group</button>
-                <button onclick="toggleSettings()">Settings</button>
-            </div>
-        </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mwamini Web - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-body theme-dark">
+    <div class="app-layout glass">
         
-        <div class="p-4 border-b dark:border-[#222d34] flex gap-4 overflow-x-auto">
-            <div class="w-12 h-12 rounded-full border-2 border-[#00a884] flex-shrink-0 cursor-pointer" onclick="addStatus()">+</div>
-            <div id="status-container" class="flex gap-2"></div>
-        </div>
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile-trigger" id="profileMenuBtn">
+                    <img src="https://via.placeholder.com/40" id="currentUserAvatar" alt="Avatar" class="avatar">
+                    <span class="status-dot online"></span>
+                </div>
+                <div class="sidebar-actions">
+                    <button title="New Group" id="createNewGroupBtn"><i class="fa-solid fa-users-medical"></i></button>
+                    <button title="Settings" id="settingsMenuBtn"><i class="fa-solid fa-gear"></i></button>
+                    <button title="Logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
 
-        <div id="chat-list" class="flex-1 overflow-y-auto"></div>
-    </aside>
+            <!-- Search bar channels/users -->
+            <div class="sidebar-search">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchBar" placeholder="Search chats or public groups...">
+                </div>
+            </div>
 
-    <main id="chat-main" class="flex-1 flex flex-col bg-cover bg-center" style="background-image: url('default-bg.jpg');">
-        <header class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] z-10 flex justify-between">
-            <div id="active-chat-info"></div>
-            <button id="delete-group-btn" class="hidden text-red-500" onclick="handleGroupDelete()">Delete Group</button>
-        </header>
+            <!-- Tab Switcher -->
+            <div class="sidebar-tabs">
+                <button class="tab-link active" data-tab="chats">Chats</button>
+                <button class="tab-link" data-tab="groups">Discover</button>
+                <button class="tab-link" data-tab="stories">Stories</button>
+            </div>
 
-        <div id="messages" class="flex-1 overflow-y-auto p-4 z-10"></div>
+            <!-- Scrollable Dynamic Target Windows -->
+            <div class="sidebar-content">
+                <div id="chatsListContainer" class="tab-panel active">
+                    <!-- Dynamic standard channels injected here via JS -->
+                    <div class="loading-skeleton"></div>
+                </div>
+                <div id="groupsDiscoveryContainer" class="tab-panel hidden">
+                    <!-- Dynamic public rooms discovery list injected here -->
+                </div>
+                <div id="storiesContainer" class="tab-panel hidden">
+                    <!-- Dynamic status story frames listed here -->
+                </div>
+            </div>
+        </aside>
 
-        <footer class="p-4 bg-[#f0f2f5] dark:bg-[#202c33] z-10 flex gap-4">
-            <input id="msg-input" class="flex-1 p-2 rounded-lg dark:bg-[#2a3942]" placeholder="Type a message">
-            <button onclick="sendMessage()" class="text-[#00a884]">Send</button>
-        </footer>
-    </main>
+        <!-- Main Workspace Interaction Panel -->
+        <main class="chat-area empty-state" id="chatArea">
+            <!-- No active conversation view prompt default -->
+            <div class="empty-view" id="emptyView">
+                <i class="fa-solid fa-comments-long large-icon"></i>
+                <h2>Welcome to Mwamini Messaging Engine</h2>
+                <p>Select a direct connection thread or join a public community server group to start routing real-time data messages.</p>
+            </div>
 
-    <div id="bg-panel" class="hidden fixed right-0 w-64 h-full bg-white dark:bg-[#202c33] shadow-lg p-4 z-20">
-        <h3 class="mb-4">Choose Background</h3>
-        <div class="grid grid-cols-2 gap-2">
-            <div class="h-20 bg-blue-200 cursor-pointer" onclick="setBG('blue.jpg')"></div>
-            <div class="h-20 bg-green-200 cursor-pointer" onclick="setBG('green.jpg')"></div>
-            <div class="h-20 bg-gray-800 cursor-pointer" onclick="setBG('dark.jpg')"></div>
+            <!-- Main active message workspace view container grid -->
+            <div class="chat-container-active hidden" id="activeChatWindow">
+                <!-- Top active metadata header -->
+                <header class="chat-header">
+                    <div class="chat-header-info">
+                        <img src="https://via.placeholder.com/45" id="targetChatAvatar" alt="Target Profile" class="avatar">
+                        <div>
+                            <h3 id="targetChatName">Group / User Room Label</h3>
+                            <p id="targetChatMeta">typing status indicator sync...</p>
+                        </div>
+                    </div>
+                    <div class="chat-header-actions">
+                        <button id="toggleThemeBtn"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                    </div>
+                </header>
+
+                <!-- Scrollable Messages Log Window Grid Layout -->
+                <div class="messages-log" id="messagesLog">
+                    <!-- Real-time Reactive Chat Stream elements injected here -->
+                </div>
+
+                <!-- Footer Interactive Typing Input Stream UI Layout -->
+                <footer class="chat-footer">
+                    <button class="footer-action-btn"><i class="fa-regular fa-face-smile"></i></button>
+                    <input type="text" id="messageInputField" placeholder="Type a message safely security keys enabled...">
+                    <button class="send-btn" id="sendMessageBtn"><i class="fa-solid fa-paper-plane"></i></button>
+                </footer>
+            </div>
+        </main>
+
+        <!-- Settings Floating View Panel UI Context Box Drawer Right-to-Left Transform Layer -->
+        <div class="drawer hidden" id="settingsDrawer">
+            <div class="drawer-header">
+                <h3>Preferences Menu</h3>
+                <button class="close-drawer" id="closeSettingsBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="drawer-content">
+                <label>System Graphic Theme Profile</label>
+                <select id="themeSelector">
+                    <option value="theme-dark">Midnight Shadow (Dark)</option>
+                    <option value="theme-light">Crystal Glass (Light)</option>
+                </select>
+                
+                <label>Text Layout Font Weight Scale</label>
+                <select id="fontSizeSelector">
+                    <option value="font-sm">Compact (Small)</option>
+                    <option value="font-md" selected>Default Core Size</option>
+                    <option value="font-lg">Large Accessible View</option>
+                </select>
+            </div>
         </div>
     </div>
-</div>
+
+    <script type="module" src="App.js"></script>
+    <script type="module" src="Auth.js"></script>
+</body>
+</html>
