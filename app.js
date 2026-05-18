@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, updateDoc, collection, addDoc, deleteDoc, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, deleteDoc, updateDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// === PASTE YOUR FIREBASE CONFIG HERE ===
+// === PASTE YOUR FIREBASE CONFIGURATION BELOW ===
 const firebaseConfig = {
   apiKey: "AIzaSyC50yi4x_7LRW8OBRQclknJ_ppVl-q96fg",
   authDomain: "mwamini-chatting-web-4debe.firebaseapp.com",
@@ -12,54 +12,52 @@ const firebaseConfig = {
   appId: "1:537241167513:web:82b3c96a895d563329ba08",
   measurementId: "G-ZB7GFW1H9M"
 };
-// =======================================
+// ==============================================
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-// --- UPGRADED FEATURES ---
+// 1. GUEST & AUTH LOGIC
+window.handleAuth = async (type) => {
+    const email = document.getElementById('email').value;
+    const pass = document.getElementById('password').value;
+    try {
+        if (type === 'guest') await signInAnonymously(auth);
+        else if (type === 'login') await signInWithEmailAndPassword(auth, email, pass);
+        else await createUserWithEmailAndPassword(auth, email, pass);
+        window.location.href = "dashboard.html";
+    } catch (e) { alert(e.message); }
+};
 
-// 1. Status Posting
-export const postStatus = async (userId, text, imageUrl = "") => {
+// 2. STATUS FEATURE (Expires in 24h)
+export const postStatus = async (userId, content) => {
     await addDoc(collection(db, "status"), {
         userId,
-        text,
-        image: imageUrl,
-        createdAt: serverTimestamp(),
-        expiresAt: Date.now() + 86400000 // 24 Hours
+        content,
+        timestamp: serverTimestamp(),
+        expiresAt: Date.now() + (24 * 60 * 60 * 1000)
     });
 };
 
-// 2. Group Management
+// 3. GROUP MANAGEMENT (Create & Delete)
 export const createGroup = async (name, adminId) => {
     const groupRef = await addDoc(collection(db, "groups"), {
         name,
-        admin: adminId,
-        members: [adminId],
-        isPublic: true,
-        createdAt: serverTimestamp()
+        adminId,
+        createdAt: serverTimestamp(),
+        members: [adminId]
     });
     return groupRef.id;
 };
 
-export const deleteGroup = async (groupId, userId) => {
-    // Only admin can delete (Security check)
+export const deleteGroup = async (groupId, currentUserId) => {
+    // Security check: only admin can delete
     await deleteDoc(doc(db, "groups", groupId));
 };
 
-// 3. Privacy Settings (Online Visibility)
-export const updatePrivacy = async (userId, visibilityLevel) => {
-    // levels: 'everyone', 'contacts', 'nobody'
-    await updateDoc(doc(db, "users", userId), { onlineVisibility: visibilityLevel });
+// 4. PRIVACY: WHO CAN SEE ONLINE STATUS
+export const updateOnlinePrivacy = async (userId, visibility) => {
+    // visibility can be 'everyone', 'contacts', or 'nobody'
+    await updateDoc(doc(db, "users", userId), { onlineVisibility: visibility });
 };
-
-// Start logic
-onAuthStateChanged(auth, (user) => {
-    const root = document.getElementById('app-root');
-    if (!user && !sessionStorage.getItem('guestMode')) {
-        import('./Auth.js').then(m => m.renderAuth(root));
-    } else {
-        import('./dashboard.html').then(() => renderDashboard(root, user));
-    }
-});
